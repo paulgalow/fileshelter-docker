@@ -1,0 +1,16 @@
+# Production configuration file to run services on servers
+# Deploy with: docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+# Further reading: https://docs.docker.com/compose/extends/#multiple-compose-files
+
+version: "3"
+
+services:
+  webproxy:
+    restart: unless-stopped
+    volumes:
+      - ./webproxy/Caddyfile_production:/etc/Caddyfile:ro
+
+  application:
+    restart: unless-stopped
+    volumes:
+      - ./application/uploads/:/var/fileshelter/

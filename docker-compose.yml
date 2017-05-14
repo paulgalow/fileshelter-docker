@@ -1,0 +1,50 @@
+# Base file that defines the canonical configuration for all services
+# See override and production files for developemt and production specific additions
+# Further reading: https://docs.docker.com/compose/extends/#multiple-compose-files
+
+version: "3"
+
+services:
+  webproxy:
+    container_name: caddy
+    read_only: true
+    build: ./webproxy
+    image: paulgalow/caddy:latest
+    depends_on:
+      - application
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./webproxy/Caddyfile_development:/etc/Caddyfile:ro
+      - ./webproxy/certificates/:/etc/caddycerts
+    environment:
+      CADDYPATH: /etc/caddycerts
+    networks:
+      - public
+      - private
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+  application:
+    container_name: fileshelter
+    read_only: true
+    build: ./application
+    image: paulgalow/fileshelter:2.0.1
+    expose:
+      - "5091"
+    volumes:
+      - ./application/fileshelter.conf:/etc/fileshelter.conf:ro
+      # - ./application/approot/messages.xml:/usr/share/fileshelter/approot/messages.xml:ro
+      # - ./application/approot/templates.xml:/usr/share/fileshelter/approot/templates.xml:ro
+      # - ./application/docroot/fileshelter.css:/usr/share/fileshelter/docroot/css/fileshelter.css:ro
+      # - ./application/docroot/favicon.ico:/usr/share/fileshelter/docroot/favicon.ico:ro
+    networks:
+      - private
+    cap_drop:
+      - ALL
+
+networks:
+  public:
+  private:

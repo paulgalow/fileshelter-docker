@@ -1,0 +1,16 @@
+# Override file for development use
+# Deploy with: docker-compose up
+# Further reading: https://docs.docker.com/compose/extends/#multiple-compose-files
+
+version: "3"
+
+services:
+  webproxy:
+    volumes:
+      - ./webproxy/Caddyfile_development:/etc/Caddyfile:ro
+
+  application:
+    ## Uncomment for testing purposes
+    # read_only: false
+    # volumes:
+    #   - ./application/uploads/:/var/fileshelter/
