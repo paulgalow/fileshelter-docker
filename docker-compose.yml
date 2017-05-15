@@ -8,7 +8,6 @@ services:
   webproxy:
     container_name: caddy
     read_only: true
-    build: ./webproxy
     image: paulgalow/caddy:latest
     depends_on:
       - application
@@ -30,7 +29,6 @@ services:
   application:
     container_name: fileshelter
     read_only: true
-    build: ./application
     image: paulgalow/fileshelter:2.0.1
     expose:
       - "5091"
