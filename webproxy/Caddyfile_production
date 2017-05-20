@@ -31,8 +31,8 @@ fileshelter.example.com {
     header_downstream -Access-Control-Allow-Origin "*"
   }
 
+  limits 2GB
   ratelimit / 500 1000 minute
-  maxrequestbody 2GB
   gzip
   log stdout
   errors stdout
