@@ -2,15 +2,16 @@
 
 # Define base image and maintainer
 FROM debian:stretch-slim
-LABEL maintainer "Paul Galow (https://github.com/paulgalow)"
+LABEL maintainer "Paul Galow (https://github.com/paulgalow)" \
+      fileshelter_version "latest"
 
 # Ser Dockerfile arguments
-ARG fileshelter_src_url="https://github.com/epoupon/fileshelter/archive/v2.0.1.tar.gz"
-ARG fileshelter_src_folder="fileshelter-2.0.1"
+ARG fileshelter_src_url="https://github.com/epoupon/fileshelter.git"
+ARG fileshelter_src_folder="fileshelter-latest"
 ARG container_user="fileshelter"
 ARG app_dir="/var/fileshelter"
 ARG web_dir="/usr/share/fileshelter/"
-ARG build_packages="autoconf automake build-essential ca-certificates curl"
+ARG build_packages="autoconf automake build-essential ca-certificates git"
 
 # Create unprivileged group and user
 RUN groupadd -r "$container_user" -g 1000 \
@@ -34,18 +35,7 @@ WORKDIR "$app_dir"
 # Build Fileshelter application
 RUN apt-get update \
     && apt-get -y install --no-install-recommends $build_packages \
-    && curl \
-      --silent \
-      --show-error \
-      --fail \
-      --location \
-      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" \
-      -o - \
-      "$fileshelter_src_url" \
-    | tar \
-      --no-same-owner \
-      -C "${app_dir}" \
-      -xz "$fileshelter_src_folder"/ \
+    && git clone "$fileshelter_src_url" "$fileshelter_src_folder" \
     && cd "$fileshelter_src_folder" \
     && autoreconf -vfi \
     && ./configure --prefix=/usr --sysconfdir=/etc \
