@@ -29,7 +29,7 @@ services:
   application:
     container_name: fileshelter
     read_only: true
-    image: paulgalow/fileshelter:2.0.1
+    image: paulgalow/fileshelter:latest
     expose:
       - "5091"
     volumes:
