@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:latest
 
 LABEL maintainer "Paul Galow (https://github.com/paulgalow)" \
       architecture="amd64"
