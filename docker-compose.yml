@@ -1,5 +1,5 @@
 # Base file that defines the canonical configuration for all services
-# See override and production files for developemt and production specific additions
+# See override and production files for environment specific additions
 # Further reading: https://docs.docker.com/compose/extends/#multiple-compose-files
 
 version: "3"
