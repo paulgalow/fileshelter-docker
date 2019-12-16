@@ -2,7 +2,7 @@
 
 A [Docker][1] workflow for running [FileShelter][2]. This includes two Docker images:
 
--   A minimal [FileShelter image][3] based on [Debian Scratch Slim][4]
+-   A minimal [FileShelter image][3] based on [Debian Buster Slim][4]
 -   A minimal [Caddy][5] image based on [Abiosoft's Alpine implementation][6] to act as a web proxy with automatic TLS termination. This image includes the [http.ratelimit][7] plugin.
 
 [1]: https://docker.com
