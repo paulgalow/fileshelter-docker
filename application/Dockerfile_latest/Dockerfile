@@ -1,54 +1,32 @@
 # Dockerfile for FileShelter (https://github.com/epoupon/fileshelter)
 
 # Define base image and maintainer
-FROM debian:stretch-slim
+FROM debian:buster-slim
 LABEL maintainer "Paul Galow (https://github.com/paulgalow)" \
       fileshelter_version "latest"
 
 # Ser Dockerfile arguments
-ARG fileshelter_src_url="https://github.com/epoupon/fileshelter.git"
-ARG fileshelter_src_folder="fileshelter-latest"
-ARG container_user="fileshelter"
+ARG catalog_url="https://debian.poupon.io/apt/debian"
+ARG gpg_key="epoupon.gpg.key"
+ARG sources_list="epoupon.list"
 ARG app_dir="/var/fileshelter"
-ARG web_dir="/usr/share/fileshelter/"
-ARG build_packages="autoconf automake build-essential ca-certificates git"
-
-# Create unprivileged group and user
-RUN groupadd -r "$container_user" -g 1000 \
-    && useradd -u 1000 -r -g "$container_user" "$container_user"
+ARG container_user="fileshelter"
 
 # Install libraries / dependencies
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-      libboost-dev \
-      libwtdbosqlite-dev \
-      libwthttp-dev \
-      libwtdbo-dev \
-      libwt-dev \
-      libconfig++-dev \
-      libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy project repository to container and install FileShelter
-WORKDIR "$app_dir"
-
-# Build Fileshelter application
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends $build_packages \
-    && git clone "$fileshelter_src_url" "$fileshelter_src_folder" \
-    && cd "$fileshelter_src_folder" \
-    && autoreconf -vfi \
-    && ./configure --prefix=/usr --sysconfdir=/etc \
-    && make install clean \
-    && cd ../ \
-    && rm -rf "${app_dir}/${fileshelter_src_folder}/" \
-    # Clean up and prune image
-    && apt-get -y purge --auto-remove $build_packages \
+RUN apt-get -q update \
+    && apt-get -q -y install --no-install-recommends \
+      ca-certificates \
+      gnupg2 \
+      wget \
+    && wget -q -O - "${catalog_url}/${gpg_key}" | apt-key add - \
+    && echo "deb ${catalog_url} buster main" > /etc/apt/sources.list.d/"${sources_list}" \
+    && apt-get update \
+    && apt-get -q -y install fileshelter \
+    && apt-get -q -y purge wget gnupg2 ca-certificates \
+    && apt-get -q -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
     # Forward logs to Docker
-    && ln -sf /dev/stdout "${app_dir}/fileshelter.log" \
-    # Assign app directory ownership to unprivileged user
-    && chown -R "$container_user":"$container_user" "$app_dir" "$web_dir"
+    && ln -sf /dev/stdout "${app_dir}/fileshelter.log"
 
 # Run application
 VOLUME "$app_dir"
