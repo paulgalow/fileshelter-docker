@@ -25,6 +25,9 @@ RUN apt-get -q update \
     && apt-get -q -y purge wget gnupg2 ca-certificates \
     && apt-get -q -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
+    # Change container user and group id to avoid permissions issues
+    && usermod -u 1000 "$container_user" \
+    && groupmod -g 1000 "$container_user" \
     # Forward logs to Docker
     && ln -sf /dev/stdout "${app_dir}/fileshelter.log"
 
