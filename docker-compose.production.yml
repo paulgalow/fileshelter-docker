@@ -12,5 +12,3 @@ services:
 
   application:
     restart: unless-stopped
-    volumes:
-      - ./application/uploads/:/var/fileshelter/
