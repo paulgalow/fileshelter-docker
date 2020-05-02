@@ -1,3 +1,5 @@
 .DS_Store
+application/approot/
+application/docroot/
 application/uploads/
 webproxy/certificates/
