@@ -2,21 +2,22 @@
 
 A [Docker][1] workflow for running [FileShelter][2]. This includes two Docker images:
 
--   A minimal [FileShelter image][3] based on [Debian Buster Slim][4]
--   A minimal [Caddy][5] image based on [Abiosoft's Alpine implementation][6] to act as a web proxy with automatic TLS termination. This image includes the [http.ratelimit][7] plugin.
+- A minimal [FileShelter image][3] based on [Debian Buster Slim][4]
+- A minimal [Caddy][5] image based on [Abiosoft's Alpine implementation][6] to act as a web proxy with automatic TLS termination. ~~This image includes the [http.ratelimit][7] plugin~~.
 
 [1]: https://docker.com
 [2]: https://github.com/epoupon/fileshelter
 [3]: https://hub.docker.com/r/paulgalow/fileshelter/
 [4]: https://hub.docker.com/_/debian/
-[5]: https://hub.docker.com/r/paulgalow/caddy/
+[5]: https://caddyserver.com/
 [6]: https://github.com/abiosoft/caddy-docker
 [7]: https://caddyserver.com/docs/http.ratelimit
 
 ## How to install
 
 Clone or download this repository to your local machine or public facing server
-```
+
+```sh
 git clone https://github.com/paulgalow/fileshelter-docker.git fileshelter
 ```
 
@@ -31,17 +32,22 @@ If you're on a Mac all you need to do is installing [Docker for Mac][10].
 ## Running FileShelter using Docker Compose
 
 ### Local development / testing
+
 To stand up a development environment (e.g. locally on your machine) run:
-```
+
+```sh
 docker-compose up
 ```
+
 To connect to FileShelter, just open your favorite browser and go to `http://localhost/`
 
 ### Public facing / production
-To stand up a production environment on a public facing server first edit the production Caddyfile at `webproxy/Caddyfile_production` and enter your public domain name and your e-mail address for registering your TLS certificates. Make sure that your host is available publicly on ports 80 and 443 and via the domain name specified in `webproxy/Caddyfile_production`.
+
+To stand up this application on a public facing server first edit the production Caddyfile at `webproxy/Caddyfile_production` and enter your public domain name and your e-mail address for registering your TLS certificates. Make sure that your host is available publicly on ports 80 and 443 and via the domain name specified in `webproxy/Caddyfile_production`.
 
 Then run:
-```
+
+```sh
 docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
 ```
 
@@ -54,12 +60,14 @@ Note: Docker Compose does not monitor the state of your containers once they hav
 ### Stopping the service
 
 To stop services run:
-```
+
+```sh
 docker-compose stop
 ```
 
 To stop services, remove containers and networks run:
-```
+
+```sh
 docker-compose down
 ```
 
@@ -80,17 +88,20 @@ An easy way to persisting uploads and the FileShelter database on a single host 
 ## Monitoring / Debugging
 
 Monitor logs continuously with Docker Compose:
-```
+
+```sh
 docker-compose logs -f
 ```
 
 To enter and inspect the running Caddy container run:
-```
+
+```sh
 docker exec -it caddy ash
 ```
 
 To enter and inspect the running FileShelter container run:
-```
+
+```sh
 docker exec -it fileshelter bash
 ```
 
