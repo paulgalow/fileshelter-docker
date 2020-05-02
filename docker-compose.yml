@@ -8,7 +8,7 @@ services:
   webproxy:
     container_name: caddy
     read_only: true
-    image: paulgalow/caddy:latest
+    image: abiosoft/caddy:1.0.3-no-stats
     depends_on:
       - application
     ports:
@@ -18,7 +18,8 @@ services:
       - ./webproxy/Caddyfile_development:/etc/Caddyfile:ro
       - ./webproxy/certificates/:/etc/caddycerts
     environment:
-      CADDYPATH: /etc/caddycerts
+      - CADDYPATH=/etc/caddycerts
+      - ACME_AGREE=true
     networks:
       - public
       - private
@@ -33,6 +34,7 @@ services:
     expose:
       - "5091"
     volumes:
+      - ./application/uploads/:/var/fileshelter/
       - ./application/fileshelter.conf:/etc/fileshelter.conf:ro
       # - ./application/approot/messages.xml:/usr/share/fileshelter/approot/messages.xml:ro
       # - ./application/approot/templates.xml:/usr/share/fileshelter/approot/templates.xml:ro
