@@ -32,7 +32,6 @@ fileshelter.example.com {
   }
 
   limits 2GB
-  ratelimit / 500 1000 minute
   gzip
   log stdout
   errors stdout
