@@ -30,7 +30,10 @@ services:
   application:
     container_name: fileshelter
     read_only: true
-    image: paulgalow/fileshelter:latest
+    image: fileshelter
+    build:
+      context: ./application
+      dockerfile: Dockerfile
     expose:
       - "5091"
     volumes:

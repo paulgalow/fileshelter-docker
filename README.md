@@ -113,3 +113,14 @@ This workflow comes with two Docker Compose and two Caddy setups, one for develo
 
 [13]: https://caddyserver.com/docs/automatic-https
 [14]: http://rhelblog.redhat.com/2016/10/17/secure-your-containers-with-this-one-weird-trick/
+
+## Updating FileShelter
+
+To rebuild the FileShelter docker image and update to the latest version available in the FileShelter
+debian repository simply rebuild the image with caching disabled
+
+```sh
+docker-compose build --no-cache
+```
+
+then restart the service.
